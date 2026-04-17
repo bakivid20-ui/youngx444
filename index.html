@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Young X | World | Green Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+            background-color: #000;
+            color: white;
+        }
+
+        /* حاوية الفيديو الثابتة */
+        .video-container {
+            position: fixe
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        #video-background {
+            min-width: 100%;
+            min-height: 100%;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter: brightness(0.7) contrast(1.15);
+            transition: filter 0.5s ease;
+        }
+
+        /* طبقة التعتيم الخضراء الداكنة */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 20, 5, 0.6);
+            z-index: -1;
+            transition: background 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        /* تأثير الفلاش الأخضر الأنيق */
+        .flash-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(80,255,120,1) 0%, rgba(0,200,50,0.9) 100%);
+            z-index: 15;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease-out;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 5;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: blur(2px);
+        }
+
+        /* القسم الأول */
+        #welcome-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1), transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* النص الرئيسي بتوهج أخضر */
+        h1 {
+            font-size: clamp(3.2rem, 12vw, 7rem);
+            letter-spacing: 10px;
+            text-shadow: 0 0 18px #00ff55, 0 0 35px rgba(0, 255, 80, 0.7);
+            margin-bottom: 20px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 20%, #66ff88 80%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: subtleGlowGreen 3s infinite alternate;
+        }
+
+        @keyframes subtleGlowGreen {
+            0% { text-shadow: 0 0 12px #00ff55, 0 0 25px rgba(0,255,80,0.5);}
+            100% { text-shadow: 0 0 28px #33ff77, 0 0 45px rgba(0,255,80,0.9);}
+        }
+
+        #welcome-section p {
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            color: #d0ffd0;
+            margin-bottom: 45px;
+            font-weight: 300;
+            backdrop-filter: blur(3px);
+            padding: 0 20px;
+        }
+
+        /* الزر الرئيسي بالأخضر */
+        .btn-primary {
+            padding: 14px 48px;
+            border: none;
+            background: linear-gradient(95deg, #00cc44, #009933);
+            color: white;
+            font-weight: bold;
+            font-size: 1.25rem;
+            cursor: pointer;
+            border-radius: 50px;
+            box-shadow: 0 0 18px rgba(0, 255, 80, 0.7);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05) translateY(-4px);
+            box-shadow: 0 0 32px #00ff66;
+            background: linear-gradient(95deg, #22ff66, #00aa44);
+        }
+
+        /* القسم الثاني */
+        #links-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.9s ease, transform 0.8s ease;
+            width: 90%;
+            max-width: 700px;
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 6vw, 2.6rem);
+            margin-bottom: 40px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            background: linear-gradient(120deg, #fff, #aaffcc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(0,255,80,0.3);
+        }
+
+        /* الأيقونات بتأثير أخضر */
+        .social-links {
+            display: flex;
+            gap: 45px;
+            margin-bottom: 70px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .social-icon {
+            font-size: 4rem;
+            color: #f0f0f0;
+            transition: 0.25s cubic-bezier(0.2, 0.9, 0.6, 1.1);
+            text-decoration: none;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            background: rgba(20, 30, 20, 0.55);
+            border-radius: 30px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(80, 255, 120, 0.3);
+            transition: all 0.3s;
+        }
+
+        .social-icon i {
+            transition: transform 0.2s;
+        }
+
+        .social-icon:hover {
+            color: #00ff66;
+            transform: translateY(-12px) scale(1.05);
+            background: rgba(0, 0, 0, 0.75);
+            border-color: #00ff66;
+            box-shadow: 0 0 28px rgba(0, 255, 80, 0.6);
+        }
+
+        .social-icon:hover i {
+            transform: scale(1.08);
+        }
+
+        .social-icon::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: rgba(0, 30, 0, 0.85);
+            padding: 4px 12px;
+            border-radius: 40px;
+            opacity: 0;
+            transition: 0.25s;
+            white-space: nowrap;
+            pointer-events: none;
+            color: #bbffcc;
+            backdrop-filter: blur(4px);
+        }
+
+        .social-icon:hover::after {
+            opacity: 1;
+            bottom: -42px;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* زر NEXT أخضر أنيق */
+        .next-btn {
+            position: relative;
+            background: rgba(0, 30, 10, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid #33ff77;
+            padding: 12px 44px;
+            font-size: 1.1rem;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 2px;
+            box-shadow: 0 0 12px rgba(0, 255, 80, 0.4);
+        }
+
+        .next-btn:hover {
+            background: #00cc44;
+            border-color: #88ffaa;
+            transform: scale(1.03);
+            box-shadow: 0 0 28px #00ff66;
+            color: #fff;
+        }
+
+        .fade-in-content {
+            display: flex !important;
+            animation: smoothRise 0.9s forwards !important;
+        }
+
+        @keyframes smoothRise {
+            0% {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hide-welcome {
+            opacity: 0 !important;
+            transform: translateY(-15px) !important;
+            pointer-events: none;
+        }
+
+        @media (max-width: 650px) {
+            .social-links { gap: 20px; }
+            .social-icon { width: 75px; height: 75px; font-size: 2.8rem; border-radius: 22px; }
+            .btn-primary { padding: 12px 36px; font-size: 1rem; }
+            h2 { margin-bottom: 25px; }
+            .next-btn { padding: 10px 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="flash-effect" id="flash"></div>
+
+    <video autoplay muted loop playsinline id="video-background">
+        <source src="song1.mp4" type="video/mp4">
+    </video>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="content-wrapper">
+        <div id="welcome-section">
+            <h1>YOUNG X</h1>
+            <p>No one Just YoungX</p>
+            <button class="btn-primary" id="enterBtn">Login</button>
+        </div>
+
+        <div id="links-section">
+            <h2>follow Us</h2>
+            <div class="social-links">
+                <a href="https://discord.gg/TJxW5hDwYY" target="_blank" class="social-icon" data-name="Discord"><i class="fab fa-discord"></i></a>
+                <a href="https://www.instagram.com/youngx444cry/" target="_blank" class="social-icon" data-name="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@youngx_9" target="_blank" class="social-icon" data-name="Tiktok"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <button class="next-btn" id="nextActionBtn">⟳ NEXT</button>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="song1.mp4" type="audio/mpeg">
+    </audio>
+
+    <script>
+        (function() {
+            const video = document.getElementById('video-background');
+            const audio = document.getElementById('bgMusic');
+            const flash = document.getElementById('flash');
+            const overlay = document.getElementById('overlay');
+            const welcomeSection = document.getElementById('welcome-section');
+            const linksSection = document.getElementById('links-section');
+            const enterBtn = document.getElementById('enterBtn');
+            const nextBtn = document.getElementById('nextActionBtn');
+            
+            let transitionInProgress = false;
+            let isWorldEntered = false;
+            let audioEndedFlag = false;
+
+            // تكتم الفيديو لأننا نعتمد على الصوت المنفصل
+            if(video) video.muted = true;
+
+            // التشغيل التلقائي عند تحميل الصفحة
+            function autoPlayMedia() {
+                if(audio) {
+                    audio.volume = 0.7;
+                    audio.loop = false;   // مهم: نعطل اللوب باش NEXT يشتغل بشكل صحيح
+                    audio.play().catch(e => {
+                        console.log("Auto-play prevented, waiting for user interaction");
+                        // إضافة مستمع لأول نقرة في أي مكان لتشغيل الصوت تلقائياً
+                        const playOnInteraction = () => {
+                            audio.play().catch(()=>{});
+                            document.removeEventListener('click', playOnInteraction);
+                            document.removeEventListener('touchstart', playOnInteraction);
+                        };
+                        document.addEventListener('click', playOnInteraction);
+                        document.addEventListener('touchstart', playOnInteraction);
+                    });
+                }
+                if(video) video.play().catch(e=>console.log("video autoplay"));
+            }
+
+            // تشغيل عند التحميل
+            window.addEventListener('load', () => {
+                autoPlayMedia();
+                // التأكد من أن الفيديو mute
+                if(video) video.muted = true;
+            });
+
+            // مراقبة نهاية الأغنية
+            if(audio) {
+                audio.addEventListener('ended', () => {
+                    audioEndedFlag = true;
+                    // إذا الأغنية سالات و المستخدم فقسم الروابط، نقدر نضيف تأثير بصري
+                    if(isWorldEntered) {
+                        // وميض خفيف أخضر للإشارة
+                        flash.style.opacity = '0.4';
+                        setTimeout(() => { flash.style.opacity = '0'; }, 200);
+                    }
+                });
+            }
+
+            // وظيفة إعادة تشغيل الأغنية من الصفر
+            function restartAudio() {
+                if(!audio) return;
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log("restart error"));
+                audioEndedFlag = false;
+            }
+
+            // الدخول للعالم (نفس الشي لكن بدون تشغيل تلقائي جديد لأن الموسيقى شغالة)
+            function enterWorld() {
+                if(transitionInProgress || isWorldEntered) return;
+                transitionInProgress = true;
+                
+                flash.style.opacity = '1';
+                
+                // نتأكد الموسيقى شغالة
+                if(audio && audio.paused) audio.play().catch(()=>{});
+                
+                setTimeout(() => {
+                    flash.style.opacity = '0';
+                    welcomeSection.classList.add('hide-welcome');
+                    setTimeout(() => {
+                        welcomeSection.style.display = 'none';
+                        linksSection.style.display = 'flex';
+                        linksSection.classList.remove('fade-in-content');
+                        void linksSection.offsetWidth;
+                        linksSection.classList.add('fade-in-content');
+                        overlay.style.background = 'rgba(0, 30, 8, 0.82)';
+                        if(video) video.style.filter = 'brightness(0.65) contrast(1.18)';
+                        isWorldEntered = true;
+                        transitionInProgress = false;
+                    }, 180);
+                }, 280);
+            }
+
+            // وظيفة NEXT: تكمل الأغنية حتى تسالي، ثم تعاود تلقائياً
+            function nextReset() {
+                if(!isWorldEntered) return;
+                if(transitionInProgress) return;
+                
+                transitionInProgress = true;
+                flash.style.opacity = '1';
+                
+                // إذا الأغنية لسا ما سالاتش، نسمحلها تكمل
+                if(audio && !audio.paused && !audio.ended) {
+                    // نضيف مستمع لحدث النهاية باش نرجع للبداية ونعاود
+                    const handleEnd = () => {
+                        restartAudio();
+                        audio.removeEventListener('ended', handleEnd);
+                        // نضيف فلاش أخضر خفيف للإشارة
+                        setTimeout(() => {
+                            if(flash) flash.style.opacity = '0.3';
+                            setTimeout(() => { if(flash) flash.style.opacity = '0'; }, 200);
+                        }, 50);
+                    };
+                    audio.addEventListener('ended', handleEnd);
+                    
+                    // نطفي الفلاش ونخلي الموسيقى تكمل
+                    setTimeout(() => {
+                        flash.style.opacity = '0';
+                        transitionInProgress = false;
+                    }, 250);
+                } 
+                else {
+                    // الأغنية سالات أو متوقفة، نعاودها من البداية
+                    restartAudio();
+                    setTimeout(() => {
+                        flash.style.opacity = '0';
+                        transitionInProgress = false;
+                    }, 280);
+                }
+                
+                // تأثيرات بصرية إضافية: وميض خفيف على الأيقونات
+                setTimeout(() => {
+                    const icons = document.querySelectorAll('.social-icon');
+                    icons.forEach(icon => {
+                        icon.style.transform = 'scale(0.98)';
+                        setTimeout(() => { icon.style.transform = ''; }, 200);
+                    });
+                }, 150);
+            }
+
+            if(enterBtn) enterBtn.addEventListener('click', enterWorld);
+            if(nextBtn) nextBtn.addEventListener('click', nextReset);
+            
+            // تحسينات جمالية: تأثير hover على البطاقات
+            const style = document.createElement('style');
+            style.textContent = `
+                .social-icon { transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.2); }
+                .btn-primary, .next-btn { transition: all 0.2s ease; }
+            `;
+            document.head.appendChild(style);
+            
+            // منع التمرير المفرط
+            window.addEventListener('touchmove', function(e) {
+                if(e.target.closest('.content-wrapper')) e.preventDefault();
+            }, { passive: false });
+        })();
+    </script>
+</body>
+</html>
